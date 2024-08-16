@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="500"
+      height="500"
+      style="border: 1px solid #000000"
+    >
+    </canvas>
+    <script>
+      const canvas = document.querySelector('#canvas');
+      const ctx = canvas.getContext('2d');
+
+      // 脸
+      ctx.beginPath();
+      ctx.arc(200, 200, 50, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 左眼
+      ctx.beginPath();
+      ctx.arc(185, 185, 5, Math.PI, Math.PI * 2);
+      ctx.stroke();
+
+      // 右眼
+      ctx.beginPath();
+      ctx.arc(216, 185, 5, Math.PI, Math.PI * 2);
+      ctx.stroke();
+
+      // 嘴
+      ctx.beginPath();
+      ctx.arc(200, 215, 10, Math.PI / 8, (Math.PI * 7) / 8);
+      ctx.stroke();
+    </script>
+  </body>
+</html>
