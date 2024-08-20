@@ -98,7 +98,99 @@ function wavy(ctx: CanvasRenderingContext2D) {
   ctx.stroke();
 }
 
+function histogram(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, 500, 500);
+
+  ctx.fillStyle = 'blue';
+
+  ctx.fillStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(30, 10);
+  ctx.lineTo(30, 460);
+  ctx.lineTo(490, 460);
+  ctx.stroke();
+
+  ctx.fillStyle = 'black';
+  for (let i = 0; i < 6; i++) {
+    ctx.fillText(String((5 - i) * 20), 4, i * 80 + 62);
+    ctx.beginPath();
+    ctx.moveTo(25, i * 80 + 60);
+    ctx.lineTo(30, i * 80 + 60);
+    ctx.stroke();
+  }
+
+  const labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY'];
+  for (let i = 0; i < 5; i++) {
+    ctx.fillText(labels[i], 50 + i * 100, 475);
+  }
+
+  ctx.fillStyle = 'blue';
+  const data = [16, 68, 20, 30, 54];
+  for (let i = 0; i < data.length; i++) {
+    ctx.fillRect(40 + i * 100, 460 - data[i] * 5, 45, data[i] * 5);
+  }
+}
+
+function pieChart(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, 500, 500);
+
+  const colors = ['orange', 'green', 'blue', 'yellow', 'teal'];
+  let total = 0;
+  const data = [100, 68, 20, 30, 100];
+  for (let i = 0; i < data.length; i++) {
+    total += data[i];
+  }
+
+  let preAngle = 0;
+  for (let i = 0; i < data.length; i++) {
+    const fraction = data[i] / total;
+    const angle = preAngle + fraction * Math.PI * 2;
+
+    // ctx.fillStyle = colors[i];
+    const grad = ctx.createRadialGradient(250, 250, 5, 250, 250, 100);
+    grad.addColorStop(0, 'white');
+    grad.addColorStop(1, colors[i]);
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.moveTo(250, 250);
+    ctx.arc(250, 250, 100, preAngle, angle, false);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    preAngle = angle;
+  }
+
+  ctx.fillStyle = 'black';
+  ctx.font = '24pt sans-serif';
+
+  const text = 'Sales Data from 2025';
+  const metrics = ctx.measureText(text);
+
+  ctx.fillText(text, 250 - metrics.width / 2, 400);
+}
+
+function particles(ctx: CanvasRenderingContext2D) {
+  function create() {}
+
+  function update() {}
+
+  function loop() {
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
+}
+
 export const drawFns = {
+  particles,
+  'pie-chart': pieChart,
+  histogram,
   wavy,
   line,
   arc,

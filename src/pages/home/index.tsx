@@ -15,7 +15,8 @@ export default function Home() {
       return;
     }
 
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.reset();
+
     const fn = drawFns[active];
     fn(ctx);
   }, [active]);
