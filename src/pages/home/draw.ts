@@ -187,6 +187,8 @@ function particles(ctx: CanvasRenderingContext2D) {
   requestAnimationFrame(loop);
 }
 
+function ticTac(ctx: CanvasRenderingContext2D) {}
+
 export const drawFns = {
   particles,
   'pie-chart': pieChart,
@@ -195,4 +197,5 @@ export const drawFns = {
   line,
   arc,
   rect,
+  ticTac,
 };
