@@ -175,22 +175,82 @@ function pieChart(ctx: CanvasRenderingContext2D) {
   ctx.fillText(text, 250 - metrics.width / 2, 400);
 }
 
-function particles(ctx: CanvasRenderingContext2D) {
-  function create() {}
+function ticTac(ctx: CanvasRenderingContext2D) {
+  // 绘制网格
+  ctx.lineWidth = 1;
+  ctx.rect(50, 50, 300, 300);
+  ctx.stroke();
 
-  function update() {}
+  ctx.beginPath();
+  ctx.moveTo(50, 150);
+  ctx.lineTo(350, 150);
 
-  function loop() {
-    requestAnimationFrame(loop);
-  }
+  ctx.moveTo(50, 250);
+  ctx.lineTo(350, 250);
 
-  requestAnimationFrame(loop);
+  ctx.moveTo(150, 50);
+  ctx.lineTo(150, 350);
+
+  ctx.moveTo(250, 50);
+  ctx.lineTo(250, 350);
+
+  ctx.stroke();
+
+  // 绘制 ❌
+  const drawX = (x: number, y: number) => {
+    ctx.beginPath();
+    ctx.moveTo(x, x);
+    ctx.lineTo(y, y);
+    ctx.moveTo(y, x);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  // 绘制圆
+  const drawArc = (x: number, y: number) => {
+    ctx.beginPath();
+    ctx.arc(x, y, 30, 0, Math.PI * 2);
+    ctx.stroke();
+  };
+
+  const steps = [
+    {
+      type: 'arc',
+      x: 100,
+      y: 200,
+    },
+    {
+      type: 'arc',
+      x: 300,
+      y: 100,
+    },
+    {
+      type: 'x',
+      x: 175,
+      y: 225,
+    },
+    {
+      type: 'x',
+      x: 75,
+      y: 125,
+    },
+    {
+      type: 'arc',
+      x: 300,
+      y: 300,
+    },
+  ];
+  steps.forEach((step) => {
+    const { type, x, y } = step;
+    if (type === 'arc') {
+      drawArc(x, y);
+    } else if (type == 'x') {
+      drawX(x, y);
+    }
+  });
 }
 
-function ticTac(ctx: CanvasRenderingContext2D) {}
-
 export const drawFns = {
-  particles,
   'pie-chart': pieChart,
   histogram,
   wavy,
