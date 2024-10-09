@@ -250,7 +250,38 @@ function ticTac(ctx: CanvasRenderingContext2D) {
   });
 }
 
+function brick(ctx: CanvasRenderingContext2D) {
+  const createRgbVal = (r: number, g: number, b: number) => {
+    return `rgb(${r},${g},${b})`;
+  };
+
+  const w = 20;
+
+  const drawRect = (x: number, y: number) => {
+    ctx.beginPath();
+    ctx.rect(x * w, y * w, w, w);
+    if ((x % 3 === 0 && x !== 0) || (y % 3 === 0 && y !== 0)) {
+      if (y === 0 || y === n - 1 || x === 0 || x === n - 1) {
+        ctx.fillStyle = 'white';
+      } else {
+        ctx.fillStyle = '#aac878';
+      }
+    } else {
+      ctx.fillStyle = createRgbVal(170, 0 + (x * w) / 2, 0 + (y * w) / 2);
+    }
+    ctx.fill();
+  };
+
+  const n = 20;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      drawRect(i, j);
+    }
+  }
+}
+
 export const drawFns = {
+  brick,
   'pie-chart': pieChart,
   histogram,
   wavy,
