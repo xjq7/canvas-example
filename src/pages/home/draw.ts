@@ -255,24 +255,36 @@ function brick(ctx: CanvasRenderingContext2D) {
     return `rgb(${r},${g},${b})`;
   };
 
-  const w = 20;
+  const w = 15;
 
   const drawRect = (x: number, y: number) => {
     ctx.beginPath();
     ctx.rect(x * w, y * w, w, w);
-    if ((x % 3 === 0 && x !== 0) || (y % 3 === 0 && y !== 0)) {
-      if (y === 0 || y === n - 1 || x === 0 || x === n - 1) {
-        ctx.fillStyle = 'white';
-      } else {
-        ctx.fillStyle = '#aac878';
-      }
+    const colorW = w + 5;
+
+    if (
+      (x % 3 === 0 && x !== 0 && (y === 0 || y === n - 1)) ||
+      (y % 3 === 0 && y !== 0 && (x === 0 || x === n - 1))
+    ) {
+      ctx.fillStyle = 'white';
+    } else if (x % 3 === (y + 2) % 3) {
+      ctx.fillStyle = createRgbVal(
+        170,
+        0 + (x * colorW) / 2 - 8,
+        0 + (y * colorW) / 2 - 8
+      );
     } else {
-      ctx.fillStyle = createRgbVal(170, 0 + (x * w) / 2, 0 + (y * w) / 2);
+      ctx.fillStyle = createRgbVal(
+        170,
+        0 + (x * colorW) / 2,
+        0 + (y * colorW) / 2
+      );
     }
+
     ctx.fill();
   };
 
-  const n = 20;
+  const n = 25;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       drawRect(i, j);
