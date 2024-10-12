@@ -10,6 +10,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    if (!canvasRef.current) return;
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) {
       return;
@@ -18,7 +19,7 @@ export default function Home() {
     ctx.reset();
 
     const fn = drawFns[active];
-    fn(ctx);
+    fn(ctx, canvasRef.current);
   }, [active]);
 
   return (
