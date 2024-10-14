@@ -1,5 +1,3 @@
-import pageflip from './pageflip';
-
 function line(ctx: CanvasRenderingContext2D) {
   // 画个头
   ctx.moveTo(220, 50);
@@ -295,7 +293,6 @@ function brick(ctx: CanvasRenderingContext2D) {
 }
 
 export const drawFns = {
-  pageflip,
   brick,
   'pie-chart': pieChart,
   histogram,

@@ -1,54 +1,38 @@
-import { useEffect, useRef, useState } from 'react';
-import { Card, Tag } from 'antd';
-import { drawFns } from './draw';
-import S from './index.module.less';
+import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
-const list = Object.keys(drawFns) as (keyof typeof drawFns)[];
+const data = [
+  {
+    name: '练习',
+    path: '/practice',
+  },
+  {
+    name: '翻书',
+    path: '/pageflip',
+  },
+  {
+    name: '拼图',
+    path: '/jigsaw',
+  },
+];
 
-export default function Home() {
-  const [active, setActive] = useState(list[0]);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-
-    ctx.reset();
-
-    const fn = drawFns[active];
-    fn(ctx, canvasRef.current);
-  }, [active]);
+export default function Page() {
+  const navigate = useNavigate();
 
   return (
-    <div className={S.container}>
-      <Card title="示例" className={S.card}>
-        <div className={S.content}>
-          <div className={S.tab}>
-            {list.map((label) => (
-              <Tag.CheckableTag
-                key={label}
-                checked={active === label}
-                onClick={() => {
-                  setActive(label);
-                }}
-                className={S.tag}
-              >
-                {label}
-              </Tag.CheckableTag>
-            ))}
-          </div>
-
-          <canvas
-            ref={canvasRef}
-            width="500"
-            height="500"
-            style={{ border: '1px solid #000000' }}
-          ></canvas>
-        </div>
-      </Card>
+    <div className="w-[100vw] h-[100vh] flex items-center justify-center gap-[15px]">
+      {data.map((page) => {
+        return (
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(page.path);
+            }}
+          >
+            {page.name}
+          </Button>
+        );
+      })}
     </div>
   );
 }

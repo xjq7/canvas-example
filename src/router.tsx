@@ -1,6 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/home';
 import Leafer from './pages/leafer';
+import Jigsaw from './pages/jigsaw';
+import Pageflip from './pages/pageflip';
+import Practice from './pages/practice';
 
 const router = createBrowserRouter([
   {
@@ -10,6 +13,19 @@ const router = createBrowserRouter([
   {
     path: '/leafer',
     element: <Leafer />,
+  },
+
+  {
+    path: '/jigsaw',
+    element: <Jigsaw />,
+  },
+  {
+    path: '/pageflip',
+    element: <Pageflip />,
+  },
+  {
+    path: '/practice',
+    element: <Practice />,
   },
 ]);
 
