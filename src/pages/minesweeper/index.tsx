@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Button, InputNumber, message, Switch } from 'antd';
+import { Alert, Button, InputNumber, Modal, Switch } from 'antd';
 import MineSweeper, { TapType } from './minesweeper';
 
 const defaultConfig = {
@@ -19,6 +19,9 @@ export default function Page() {
 
   const [config, setConfig] = useState(defaultConfig);
 
+  const [resultOpen, setResultOpen] = useState(false);
+  const [result, setResult] = useState(false);
+
   const { x, bomberCount } = config;
 
   useEffect(() => {
@@ -31,10 +34,12 @@ export default function Page() {
       ...config,
       view: 'minesweeper',
       onFail() {
-        message.error('游戏结束!');
+        setResult(false);
+        setResultOpen(true);
       },
       onSuccess() {
-        message.success('成功清除所有炸弹!');
+        setResult(true);
+        setResultOpen(true);
       },
     });
   }, []);
@@ -89,6 +94,28 @@ export default function Page() {
         </Button>
       </div>
       <div id="minesweeper" className="flex items-center justify-center"></div>
+      <Modal
+        title="游戏结束!"
+        open={resultOpen}
+        closable={true}
+        centered={true}
+        maskClosable={true}
+        onOk={() => {
+          setResultOpen(false);
+        }}
+        onCancel={() => {
+          setResultOpen(false);
+        }}
+        footer={null}
+      >
+        <div className="h-[100px] flex items-center justify-center">
+          {result ? (
+            <Alert message="挑战成功! 已清除所有炸弹!" type="success" />
+          ) : (
+            <Alert message="挑战失败! 再接再厉!" type="error" />
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
