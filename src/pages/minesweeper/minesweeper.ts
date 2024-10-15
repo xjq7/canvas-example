@@ -84,8 +84,34 @@ export default class MineSweeper {
     this.init();
   }
 
+  handleSuccess() {
+    const { x, y, onSuccess } = this.config;
+    for (let i = 0; i < x; i++) {
+      for (let j = 0; j < y; j++) {
+        if (this.grids[i][j] === -1) {
+          this.drawBomber(i, j);
+        }
+      }
+    }
+    this.status = 'success';
+    onSuccess();
+  }
+
+  handleFail() {
+    const { x, y, onFail } = this.config;
+    for (let i = 0; i < x; i++) {
+      for (let j = 0; j < y; j++) {
+        if (this.grids[i][j] === -1) {
+          this.drawBomber(i, j);
+        }
+      }
+    }
+    this.status = 'fail';
+    onFail();
+  }
+
   handleTap(e) {
-    const { bomberCount, gap, onFail, onSuccess } = this.config;
+    const { bomberCount, gap } = this.config;
     if (this.status !== 'gaming') {
       return;
     }
@@ -103,23 +129,10 @@ export default class MineSweeper {
           this.turnOpen(i, j);
 
           if (this.remainCount === bomberCount) {
-            this.status = 'success';
-            onSuccess();
+            this.handleSuccess();
           }
         } else {
-          const bomberRect = new Rect({
-            x: i * (this.w + gap),
-            y: j * (this.h + gap),
-            width: this.w,
-            height: this.h,
-            fill: {
-              type: 'image',
-              url: bomberImage,
-            },
-          });
-          this.leafer.add(bomberRect);
-          this.status = 'fail';
-          onFail();
+          this.handleFail();
         }
       } else {
         if (this.openGrids[i][j]) {
@@ -175,6 +188,21 @@ export default class MineSweeper {
         }
       }
     }
+  }
+
+  drawBomber(i: number, j: number) {
+    const { gap } = this.config;
+    const bomberRect = new Rect({
+      x: i * (this.w + gap) + 1,
+      y: j * (this.h + gap) + 1,
+      width: this.w - 1 * 2,
+      height: this.h - 1 * 2,
+      fill: {
+        type: 'image',
+        url: bomberImage,
+      },
+    });
+    this.leafer.add(bomberRect);
   }
 
   turnOpen(i: number, j: number) {
