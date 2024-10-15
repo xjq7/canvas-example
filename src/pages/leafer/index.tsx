@@ -33,10 +33,6 @@ export default function Component() {
 
     app.editor = new Editor();
 
-    setTimeout(() => {
-      app.tree.remove(rect1);
-      app.editor.cancel();
-    }, 5000);
     app.sky.add(app.editor);
 
     return () => {
