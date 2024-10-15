@@ -22,6 +22,11 @@ export default function Page() {
   const { x, bomberCount } = config;
 
   useEffect(() => {
+    if (!minesweeperRef.current) return;
+    minesweeperRef.current.update(config);
+  }, [config]);
+
+  useEffect(() => {
     minesweeperRef.current = new MineSweeper({
       ...config,
       view: 'minesweeper',
@@ -32,10 +37,7 @@ export default function Page() {
         message.success('成功清除所有炸弹!');
       },
     });
-    return () => {
-      minesweeperRef.current.destroy();
-    };
-  }, [config]);
+  }, []);
 
   useEffect(() => {
     minesweeperRef.current.tapType = tapType;

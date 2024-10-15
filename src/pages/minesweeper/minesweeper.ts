@@ -3,16 +3,19 @@ import { create2dimensionArr } from './utils';
 import bomberImage from './bomber.png';
 import markImage from './mark.jpeg';
 
-export interface Config {
+export interface Config extends IBaseConfig {
+  view: string;
+  onFail: () => void;
+  onSuccess: () => void;
+}
+
+export interface IBaseConfig {
   x: number;
   y: number;
   width: number;
   height: number;
   bomberCount: number;
   gap: number;
-  view: string;
-  onFail: () => void;
-  onSuccess: () => void;
 }
 
 type Status = 'success' | 'gaming' | 'fail';
@@ -74,6 +77,11 @@ export default class MineSweeper {
         this.leafer.add(rect);
       }
     }
+  }
+
+  update(config: IBaseConfig) {
+    this.config = { ...this.config, ...config };
+    this.init();
   }
 
   handleTap(e) {
