@@ -6,12 +6,12 @@ import bomberImage from './bomber.png';
 import markImage from './mark.jpeg';
 
 const defaultConfig = {
-  width: 600,
-  height: 600,
-  x: 10,
-  y: 12,
+  width: 800,
+  height: 800,
+  x: 15,
+  y: 15,
   gap: 2,
-  bomberCount: 3,
+  bomberCount: 20,
 };
 
 type GameStatus = 'success' | 'fail' | 'gaming';
