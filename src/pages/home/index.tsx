@@ -14,6 +14,10 @@ const data = [
     name: '拼图',
     path: '/jigsaw',
   },
+  {
+    name: '扫雷',
+    path: '/minesweeper',
+  },
 ];
 
 export default function Page() {

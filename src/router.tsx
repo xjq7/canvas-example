@@ -4,6 +4,7 @@ import Leafer from './pages/leafer';
 import Jigsaw from './pages/jigsaw';
 import Pageflip from './pages/pageflip';
 import Practice from './pages/practice';
+import MineSweeper from './pages/minesweeper';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/practice',
     element: <Practice />,
+  },
+  {
+    path: '/minesweeper',
+    element: <MineSweeper />,
   },
 ]);
 
