@@ -15,3 +15,9 @@ canvas 学习项目
 - [圆](./arc.html)
 
   画一个笑脸
+
+## 应用
+
+[扫雷小游戏-在线体验](https://canvas.xjq.icu/minesweeper)
+
+[扫雷小游戏-源码](https://github.com/xjq7/canvas-example/tree/main/src/pages/minesweeper)
