@@ -21,3 +21,4 @@ export function getTextColor(num: number) {
 export function getDelayTime(step: number) {
   return Math.log(step) * 0.08;
 }
+

@@ -3,14 +3,21 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, InputNumber, message, Modal } from 'antd';
 import MineSweeper from './minesweeper';
 import { useDebounce, useWindowSize } from 'react-use';
+import storage from '../../utils/storage';
 
-let defaultConfig = {
-  width: 800,
-  height: 800,
+const storagePrefix = 'minesweeper_';
+
+const defaultPersistConfig = storage.get(`${storagePrefix}config`) || {
   x: 15,
   y: 15,
-  gap: 2,
   bomberCount: 20,
+};
+
+let defaultConfig = {
+  ...defaultPersistConfig,
+  width: 800,
+  height: 800,
+  gap: 2,
 };
 
 export default function Page() {
@@ -40,6 +47,7 @@ export default function Page() {
   useDebounce(
     () => {
       if (!minesweeperRef.current) return;
+      storage.set(`${storagePrefix}config`, config);
       minesweeperRef.current.update(config);
     },
     1000,
