@@ -1,5 +1,6 @@
 import { Leafer, Rect, Text, PointerEvent } from 'leafer-ui';
-import { create2dimensionArr } from './utils';
+import { Animate } from '@leafer-in/animate';
+import { create2dimensionArr, getDelayTime, getTextColor } from './utils';
 import bomberImage from './bomber.png';
 import markImage from './mark.png';
 
@@ -69,7 +70,6 @@ export default class MineSweeper {
           fill: '#22d2ef',
           cursor: 'pointer',
         });
-
         this.rectGrids[i][j] = rect;
         this.leafer.add(rect);
       }
@@ -87,6 +87,10 @@ export default class MineSweeper {
       for (let j = 0; j < y; j++) {
         if (this.grids[i][j] === -1) {
           this.drawBomber(i, j);
+        } else if (this.grids[i][j] > 0) {
+          this.drawText(i, j, this.grids[i][j], 0);
+        } else {
+          this.drawText(i, j, undefined, 0);
         }
       }
     }
@@ -122,7 +126,7 @@ export default class MineSweeper {
         this.leafer.remove(this.markGrids[i][j]);
         this.markGrids[i][j] = null;
         this.openGrids[i][j] = 1;
-        this.turnOpen(i, j);
+        this.turnOpen(i, j, 0);
 
         if (this.remainCount === bomberCount) {
           this.handleSuccess();
@@ -169,7 +173,7 @@ export default class MineSweeper {
     }
   }
 
-  diffusion(i: number, j: number) {
+  diffusion(i: number, j: number, step: number) {
     const { x, y } = this.config;
     const drts = [
       [-1, -1],
@@ -193,7 +197,7 @@ export default class MineSweeper {
 
         if (this.grids[x1][y1] !== -1) {
           this.openGrids[x1][y1] = 1;
-          this.turnOpen(x1, y1);
+          this.turnOpen(x1, y1, step + 1);
         }
       }
     }
@@ -201,42 +205,83 @@ export default class MineSweeper {
 
   drawBomber(i: number, j: number) {
     const { gap } = this.config;
+
+    const width = this.w - 1 * 2;
+    const height = this.h - 1 * 2;
+
     const bomberRect = new Rect({
       x: i * (this.w + gap) + 1,
       y: j * (this.h + gap) + 1,
-      width: this.w - 1 * 2,
-      height: this.h - 1 * 2,
+      width,
+      height,
       fill: {
         type: 'image',
         url: bomberImage,
       },
     });
+
     this.leafer.add(bomberRect);
   }
 
-  turnOpen(i: number, j: number) {
+  /**
+   * 绘制文本
+   *
+   * @param {number} i
+   * @param {number} j
+   * @param {number} num 第几个绘制的元素
+   * @memberof MineSweeper
+   */
+  drawText(i: number, j: number, num: number, step: number) {
     const { gap } = this.config;
-    const target = this.rectGrids[i][j];
-    const val = this.grids[i][j];
-    if (val > 0) {
+
+    const delayTime = getDelayTime(step);
+
+    const rect = new Rect({
+      x: i * (this.w + gap),
+      y: j * (this.h + gap),
+      width: this.w,
+      height: this.h,
+      fill: '#c4cbcf',
+      cursor: 'pointer',
+      opacity: 0,
+      animationOut: null,
+    });
+    new Animate(rect, [{ opacity: 1 }], {
+      duration: 1,
+      delay: delayTime,
+    });
+    this.leafer.add(rect);
+    if (num > 0) {
       const text = new Text({
         x: i * (this.w + gap),
         y: j * (this.h + gap),
         width: this.w,
         height: this.h,
-        text: String(this.grids[i][j]),
+        text: String(num),
+        fill: getTextColor(num),
         textAlign: 'center',
         verticalAlign: 'middle',
-        fontSize: 24,
+        fontSize: (28 * this.w) / (600 / 15),
         fontWeight: 'bold',
+        opacity: 0,
+        animationOut: null,
+      });
+      new Animate(text, [{ opacity: 1 }], {
+        duration: 1,
+        delay: delayTime,
       });
 
       this.leafer.add(text);
-    } else if (val === 0) {
-      this.diffusion(i, j);
+    }
+  }
+
+  turnOpen(i: number, j: number, step: number) {
+    const val = this.grids[i][j];
+    this.drawText(i, j, val > 0 ? val : undefined, step);
+    if (val === 0) {
+      this.diffusion(i, j, step);
     }
     this.remainCount--;
-    target.fill = '#abcabc';
   }
 
   generateGrids() {
@@ -247,7 +292,7 @@ export default class MineSweeper {
     const set = new Set();
     let bomberCountTemp = bomberCount;
 
-    while (bomberCountTemp) {
+    while (bomberCountTemp || bomberCountTemp === x * y - bomberCount) {
       const randomx = Math.round((x - 1) * Math.random());
       const randomy = Math.round((y - 1) * Math.random());
 

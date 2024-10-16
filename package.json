@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@leafer-in/animate": "^1.0.5",
     "@leafer-in/editor": "^1.0.4",
     "@leafer-in/view": "^1.0.4",
     "antd": "^5.20.1",

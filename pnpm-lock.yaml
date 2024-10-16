@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@leafer-in/animate':
+    specifier: ^1.0.5
+    version: 1.0.5
   '@leafer-in/editor':
     specifier: ^1.0.4
     version: 1.0.5
@@ -499,6 +502,23 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
+
+  /@leafer-in/animate@1.0.5:
+    resolution: {integrity: sha512-hsHgOgUeDElP4IjBp94RRK9k99Psx0XBBq8sqsbmkY1+wf9fsb/UJfFngbTKFzDXV84cBxGrTB1gxGpUuirHCw==}
+    dependencies:
+      '@leafer-in/color': 1.0.5
+      '@leafer-in/interface': 1.0.5
+      '@leafer-ui/draw': 1.0.5
+      '@leafer-ui/interface': 1.0.5
+    dev: false
+
+  /@leafer-in/color@1.0.5:
+    resolution: {integrity: sha512-MSL1LPuCSQ9Pwcu4MNclveLadZgy7HbXcK/jaL5SuB+1Jx9j/pUsghLDy5kO1xIoTxkh6L7SOwNf28MnhbmhYw==}
+    dependencies:
+      '@leafer-in/interface': 1.0.5
+      '@leafer-ui/draw': 1.0.5
+      '@leafer-ui/interface': 1.0.5
+    dev: false
 
   /@leafer-in/editor@1.0.5:
     resolution: {integrity: sha512-pA55aDHYDtntpljr7k5Yzgs2wjt87wtcDq2aDozEYUglzm7zJlOG34TB/OYWYnnU0OMdh3K/HlmqMaB8VyM9NQ==}

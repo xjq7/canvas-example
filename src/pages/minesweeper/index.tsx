@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Alert, Button, InputNumber, Modal } from 'antd';
+import { Alert, Button, InputNumber, message, Modal } from 'antd';
 import MineSweeper from './minesweeper';
 import { useDebounce, useWindowSize } from 'react-use';
 
@@ -35,7 +35,7 @@ export default function Page() {
   const [resultOpen, setResultOpen] = useState(false);
   const [result, setResult] = useState(false);
 
-  const { x, bomberCount } = config;
+  const { x, y, bomberCount } = config;
 
   useDebounce(
     () => {
@@ -81,7 +81,13 @@ export default function Page() {
             value={bomberCount}
             onChange={(value) => {
               if (typeof value === 'number') {
-                setConfig({ ...config, bomberCount: value });
+                const maxBomberCount = Math.round(0.6 * x * y);
+                if (value > maxBomberCount) {
+                  message.error(`炸弹数量不能超过 ${maxBomberCount}!`);
+                  setConfig({ ...config, bomberCount: maxBomberCount });
+                } else {
+                  setConfig({ ...config, bomberCount: value });
+                }
               }
             }}
           ></InputNumber>
