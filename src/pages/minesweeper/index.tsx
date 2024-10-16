@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Alert, Button, InputNumber, Modal, Switch } from 'antd';
-import MineSweeper, { TapType } from './minesweeper';
+import { Alert, Button, InputNumber, Modal } from 'antd';
+import MineSweeper from './minesweeper';
+import { useWindowSize } from 'react-use';
 
-const defaultConfig = {
-  width: 800,
-  height: 800,
+let defaultConfig = {
+  width: 600,
+  height: 600,
   x: 15,
   y: 15,
   gap: 2,
@@ -15,7 +16,19 @@ const defaultConfig = {
 export default function Page() {
   const minesweeperRef = useRef<MineSweeper>();
 
-  const [tapType, setTapType] = useState<TapType>('view');
+  const { width, height } = useWindowSize();
+
+  defaultConfig = {
+    ...defaultConfig,
+    width: Math.min(
+      800,
+      Math.min(Math.round(height * 0.82), Math.round(width * 0.82))
+    ),
+    height: Math.min(
+      800,
+      Math.min(Math.round(height * 0.82), Math.round(width * 0.82))
+    ),
+  };
 
   const [config, setConfig] = useState(defaultConfig);
 
@@ -44,10 +57,6 @@ export default function Page() {
     });
   }, []);
 
-  useEffect(() => {
-    minesweeperRef.current.tapType = tapType;
-  }, [tapType]);
-
   return (
     <div className="w-[100vw] h-[100vh] flex items-center justify-center background-[#aaa] flex-col">
       <div className="mb-[10px] flex flex-row">
@@ -73,16 +82,6 @@ export default function Page() {
             }}
           ></InputNumber>
         </div>
-        <div className="ml-[12px] flex flex-row items-center">
-          <Switch
-            value={tapType === 'view'}
-            onChange={(value) => setTapType(value ? 'view' : 'mark')}
-          ></Switch>
-          <span className="ml-[5px]">
-            {tapType === 'view' ? '查看' : '标记'}
-          </span>
-        </div>
-
         <Button
           type="primary"
           onClick={() => {

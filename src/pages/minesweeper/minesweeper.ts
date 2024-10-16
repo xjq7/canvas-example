@@ -1,7 +1,7 @@
 import { Leafer, Rect, Text, PointerEvent } from 'leafer-ui';
 import { create2dimensionArr } from './utils';
 import bomberImage from './bomber.png';
-import markImage from './mark.jpeg';
+import markImage from './mark.png';
 
 export interface Config extends IBaseConfig {
   view: string;
@@ -20,8 +20,6 @@ export interface IBaseConfig {
 
 type Status = 'success' | 'gaming' | 'fail';
 
-export type TapType = 'mark' | 'view';
-
 export default class MineSweeper {
   grids: number[][];
   openGrids: number[][];
@@ -33,7 +31,6 @@ export default class MineSweeper {
   leafer: Leafer;
   remainCount: number;
   status: Status = 'gaming';
-  tapType: TapType = 'view';
 
   constructor(config: Config) {
     this.config = config;
@@ -43,6 +40,7 @@ export default class MineSweeper {
     this.leafer = new Leafer({ view, width, height });
 
     this.leafer.on(PointerEvent.TAP, this.handleTap.bind(this));
+    this.leafer.on(PointerEvent.MENU_TAP, this.handleMenuTap.bind(this));
 
     this.init();
   }
@@ -59,7 +57,6 @@ export default class MineSweeper {
     this.markGrids = create2dimensionArr(x, y, 0);
     this.rectGrids = create2dimensionArr(x, y);
     this.status = 'gaming';
-    this.tapType = 'view';
     this.remainCount = x * y;
 
     for (let i = 0; i < x; i++) {
@@ -121,41 +118,53 @@ export default class MineSweeper {
 
       const i = x / (this.w + gap);
       const j = y / (this.h + gap);
-      if (this.tapType === 'view') {
-        if (this.grids[i][j] !== -1) {
-          this.leafer.remove(this.markGrids[i][j]);
-          this.markGrids[i][j] = null;
-          this.openGrids[i][j] = 1;
-          this.turnOpen(i, j);
+      if (this.grids[i][j] !== -1) {
+        this.leafer.remove(this.markGrids[i][j]);
+        this.markGrids[i][j] = null;
+        this.openGrids[i][j] = 1;
+        this.turnOpen(i, j);
 
-          if (this.remainCount === bomberCount) {
-            this.handleSuccess();
-          }
-        } else {
-          this.handleFail();
+        if (this.remainCount === bomberCount) {
+          this.handleSuccess();
         }
       } else {
-        if (this.openGrids[i][j]) {
-          return;
-        }
-        if (this.markGrids[i][j]) {
-          this.leafer.remove(this.markGrids[i][j]);
-          this.markGrids[i][j] = null;
-        } else {
-          const markRect = new Rect({
-            x: i * (this.w + gap),
-            y: j * (this.h + gap),
-            width: this.w,
-            height: this.h,
-            fill: {
-              type: 'image',
-              url: markImage,
-            },
-            cursor: 'pointer',
-          });
-          this.markGrids[i][j] = markRect;
-          this.leafer.add(markRect);
-        }
+        this.handleFail();
+      }
+    }
+  }
+
+  handleMenuTap(e) {
+    const { gap } = this.config;
+    if (this.status !== 'gaming') {
+      return;
+    }
+
+    if (e.target !== this.leafer) {
+      const { x, y } = e.target;
+
+      const i = x / (this.w + gap);
+      const j = y / (this.h + gap);
+      if (this.openGrids[i][j]) {
+        return;
+      }
+
+      if (this.markGrids[i][j]) {
+        this.leafer.remove(this.markGrids[i][j]);
+        this.markGrids[i][j] = null;
+      } else {
+        const markRect = new Rect({
+          x: i * (this.w + gap),
+          y: j * (this.h + gap),
+          width: this.w,
+          height: this.h,
+          fill: {
+            type: 'image',
+            url: markImage,
+          },
+          cursor: 'pointer',
+        });
+        this.markGrids[i][j] = markRect;
+        this.leafer.add(markRect);
       }
     }
   }
