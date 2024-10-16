@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Alert, Button, InputNumber, Modal } from 'antd';
 import MineSweeper from './minesweeper';
-import { useWindowSize } from 'react-use';
+import { useDebounce, useWindowSize } from 'react-use';
 
 let defaultConfig = {
-  width: 600,
-  height: 600,
+  width: 800,
+  height: 800,
   x: 15,
   y: 15,
   gap: 2,
@@ -37,10 +37,14 @@ export default function Page() {
 
   const { x, bomberCount } = config;
 
-  useEffect(() => {
-    if (!minesweeperRef.current) return;
-    minesweeperRef.current.update(config);
-  }, [config]);
+  useDebounce(
+    () => {
+      if (!minesweeperRef.current) return;
+      minesweeperRef.current.update(config);
+    },
+    1000,
+    [config]
+  );
 
   useEffect(() => {
     minesweeperRef.current = new MineSweeper({
