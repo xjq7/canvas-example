@@ -28,11 +28,11 @@ export default function Page() {
   defaultConfig = {
     ...defaultConfig,
     width: Math.min(
-      800,
+      1200,
       Math.min(Math.round(height * 0.82), Math.round(width * 0.82))
     ),
     height: Math.min(
-      800,
+      1200,
       Math.min(Math.round(height * 0.82), Math.round(width * 0.82))
     ),
   };
