@@ -18,6 +18,10 @@ const data = [
     name: '扫雷',
     path: '/minesweeper',
   },
+  {
+    name: 'pixijs',
+    path: '/pixijs',
+  },
 ];
 
 export default function Page() {
@@ -28,6 +32,7 @@ export default function Page() {
       {data.map((page) => {
         return (
           <Button
+            key={page.name}
             type="primary"
             onClick={() => {
               navigate(page.path);

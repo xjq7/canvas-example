@@ -5,6 +5,8 @@ import Jigsaw from './pages/jigsaw';
 import Pageflip from './pages/pageflip';
 import Practice from './pages/practice';
 import MineSweeper from './pages/minesweeper';
+import G2048 from './pages/2048';
+import Editor from './pages/editor';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: '/minesweeper',
     element: <MineSweeper />,
+  },
+  {
+    path: '/2048',
+    element: <G2048 />,
+  },
+  {
+    path: '/editor',
+    element: <Editor />,
   },
 ]);
 
