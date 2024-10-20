@@ -12,21 +12,25 @@
   "dependencies": {
     "@leafer-in/animate": "^1.0.5",
     "@leafer-in/editor": "^1.0.4",
+    "@leafer-in/state": "^1.0.5",
     "@leafer-in/view": "^1.0.4",
     "allotment": "^1.20.2",
     "antd": "^5.20.1",
     "classnames": "^2.5.1",
     "leafer-ui": "^1.0.4",
+    "leafer-x-ruler": "^1.0.13",
     "lodash": "^4.17.21",
     "pixi.js": "^8.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
-    "react-use": "^17.5.1"
+    "react-use": "^17.5.1",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/lodash": "^4.17.10",
+    "@types/node": "^22.7.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

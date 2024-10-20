@@ -1,0 +1,51 @@
+{
+  "id": "4716609",
+  "name": "editor",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3894654",
+      "name": "箭头",
+      "font_class": "jiantou",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "18829236",
+      "name": "箭头",
+      "font_class": "jiantou1",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "3923002",
+      "name": "模板",
+      "font_class": "moban",
+      "unicode": "e76a",
+      "unicode_decimal": 59242
+    },
+    {
+      "icon_id": "579741",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e788",
+      "unicode_decimal": 59272
+    },
+    {
+      "icon_id": "9626955",
+      "name": "文字",
+      "font_class": "wenzi",
+      "unicode": "e883",
+      "unicode_decimal": 59523
+    },
+    {
+      "icon_id": "13901301",
+      "name": "素材",
+      "font_class": "sucai",
+      "unicode": "e833",
+      "unicode_decimal": 59443
+    }
+  ]
+}

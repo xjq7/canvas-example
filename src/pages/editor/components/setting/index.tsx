@@ -1,3 +1,5 @@
+import S from './index.module.less';
+
 export default function Setting() {
-  return <div></div>;
+  return <div className={S.setting}>settings</div>;
 }

@@ -1,8 +1,50 @@
-.container {
-  width: 60px;
+.material {
   height: 100%;
   background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .list {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+
+      border-right: 1px solid #dcdee2;
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        width: 100%;
+        border-right: 2px solid transparent;
+      }
+
+      .item-active {
+        border-right: 2px solid #2d8cf0;
+      }
+    }
+
+    .aside {
+      width: 300px;
+      position: relative;
+    }
+  }
+
+  .menu {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translate(0, -15px);
+    cursor: pointer;
+    z-index: 999999;
+  }
 }

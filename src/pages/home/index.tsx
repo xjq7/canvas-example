@@ -19,8 +19,8 @@ const data = [
     path: '/minesweeper',
   },
   {
-    name: 'pixijs',
-    path: '/pixijs',
+    name: '编辑器',
+    path: '/editor',
   },
 ];
 
