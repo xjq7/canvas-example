@@ -2,7 +2,17 @@ import React from 'react';
 import classNames from 'classnames';
 import './iconfont.css';
 
-type IconName = 'moban' | 'yonghu' | 'wenzi' | 'sucai' | 'jiantou' | 'jiantou1';
+export type IconName =
+  | 'moban'
+  | 'yonghu'
+  | 'wenzi'
+  | 'sucai'
+  | 'jiantou'
+  | 'jiantou1'
+  | 'xingzhuang-sanjiaoxing'
+  | 'xingzhuang-juxing'
+  | 'yuanhuan'
+  | 'tupian';
 
 interface Props
   extends React.DetailedHTMLProps<

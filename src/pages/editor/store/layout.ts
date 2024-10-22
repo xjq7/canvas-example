@@ -25,9 +25,13 @@ const useLayoutStore = create<State & Action>((set, get) => ({
   asideOpen: false,
   updateAsideOpen: (asideOpen) => {
     if (asideOpen) {
-      set(() => ({ contentWidth: get().contentWidth - 300, asideOpen }));
+      if (!get().asideOpen) {
+        set(() => ({ contentWidth: get().contentWidth - 300, asideOpen }));
+      }
     } else {
-      set(() => ({ contentWidth: get().contentWidth + 300, asideOpen }));
+      if (get().asideOpen) {
+        set(() => ({ contentWidth: get().contentWidth + 300, asideOpen }));
+      }
     }
   },
   updateContentWidth: (width) => set(() => ({ contentWidth: width })),

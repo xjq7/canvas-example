@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-
-import { Application } from './application';
+import Editor from '../../core/editor';
 import { useLayoutStore } from '../../store/layout';
 import { useComponentStore } from '../../store/components';
 
@@ -9,37 +8,36 @@ import S from './index.module.less';
 
 export default function EditorComponent() {
   const { contentWidth, contentHeight } = useLayoutStore();
-  const { components, updateApp, updateSelectCmp } = useComponentStore();
-  const appRef = useRef<Application>();
-
-  const selectTargetRef = useRef();
+  const { components, updateEditor } = useComponentStore();
+  const editorRef = useRef<Editor>();
 
   useEffect(() => {
     const id = 'editor-canvas-container';
 
     const el = document.querySelector(`#${id}`);
 
-    let contextMenuListener, cancelContextMenuListener;
+    let cancelContextMenuListener;
 
     if (el) {
-      appRef.current = new Application({
+      editorRef.current = new Editor({
         width: contentWidth,
         height: contentHeight,
+        frameHeight: 900,
+        frameWidth: 500,
         view: id,
         onMenuTap(event) {
           console.log('event', event);
-          selectTargetRef.current = event.target;
         },
         onSelect(event) {
-          updateSelectCmp(event.value);
+          // updateSelectCmp(event.value);
+          console.log(event);
+        },
+        onMove(event) {
+          console.log(event);
         },
       });
-      updateApp(appRef.current);
 
-      contextMenuListener = el.addEventListener(
-        'contextmenu',
-        handleContextMenu
-      );
+      updateEditor(editorRef.current);
 
       cancelContextMenuListener = document.addEventListener('click', () => {
         setMenuPosition({ x: 0, y: 0 });
@@ -47,12 +45,10 @@ export default function EditorComponent() {
     }
 
     return () => {
-      if (appRef.current) {
-        appRef.current.destroy();
+      if (editorRef.current) {
+        editorRef.current.destroy();
       }
-      if (contextMenuListener) {
-        el.removeEventListener('contextmenu', contextMenuListener);
-      }
+
       if (cancelContextMenuListener) {
         document.removeEventListener('click', cancelContextMenuListener);
       }
@@ -60,27 +56,14 @@ export default function EditorComponent() {
   }, []);
 
   useEffect(() => {
-    if (appRef.current) {
-      appRef.current.resize({ width: contentWidth, height: contentHeight });
+    if (editorRef.current) {
+      editorRef.current.resize({ width: contentWidth, height: contentHeight });
     }
   }, [contentWidth, contentHeight]);
 
-  useEffect(() => {
-    // appRef.current
-  }, [components]);
+  useEffect(() => {}, [components]);
 
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-
-  const handleContextMenu = (event) => {
-    event.preventDefault();
-    console.log(useComponentStore.getState().selectCmp);
-
-    setMenuPosition({ x: event.clientX, y: event.clientY });
-  };
-
-  const handleCloseMenu = () => {
-    setMenuPosition({ x: 0, y: 0 });
-  };
 
   const Menu = ({ x, y }) => {
     return createPortal(
@@ -95,13 +78,7 @@ export default function EditorComponent() {
         }}
       >
         <ul>
-          <li
-            onClick={() => {
-              console.log(selectTargetRef.current);
-            }}
-          >
-            移除
-          </li>
+          <li onClick={() => {}}>移除</li>
           <li>置顶</li>
           <li>置底</li>
         </ul>
@@ -116,9 +93,7 @@ export default function EditorComponent() {
       style={{ width: contentWidth }}
       id="editor-canvas-container"
     >
-      {menuPosition.x !== 0 && (
-        <Menu x={menuPosition.x} y={menuPosition.y} onClose={handleCloseMenu} />
-      )}
+      {menuPosition.x !== 0 && <Menu x={menuPosition.x} y={menuPosition.y} />}
     </main>
   );
 }
