@@ -22,6 +22,10 @@ const data = [
     name: '编辑器',
     path: '/editor',
   },
+  {
+    name: '时钟',
+    path: '/clock',
+  },
 ];
 
 export default function Page() {

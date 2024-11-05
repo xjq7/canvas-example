@@ -7,6 +7,7 @@ import Practice from './pages/practice';
 import MineSweeper from './pages/minesweeper';
 import G2048 from './pages/2048';
 import Editor from './pages/editor';
+import Clock from './pages/clock';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: '/editor',
     element: <Editor />,
+  },
+  {
+    path: '/clock',
+    element: <Clock />,
   },
 ]);
 
