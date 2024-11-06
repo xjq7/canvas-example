@@ -292,7 +292,69 @@ function brick(ctx: CanvasRenderingContext2D) {
   }
 }
 
+function test(ctx: CanvasRenderingContext2D) {
+  const gradient = ctx.createRadialGradient(200, 300, 10, 200, 0, 100);
+
+  gradient.addColorStop(0, 'blue');
+  gradient.addColorStop(0.25, 'white');
+  gradient.addColorStop(0.5, 'purple');
+  gradient.addColorStop(0.75, 'red');
+  gradient.addColorStop(1, 'yellow');
+
+  ctx.fillStyle = gradient;
+  ctx.rect(0, 0, 400, 300);
+  ctx.fill();
+}
+
+function love(ctx: CanvasRenderingContext2D) {
+  const drawLeft = () => {
+    ctx.beginPath();
+
+    const p0 = [200, 200];
+    const p1 = [110, 170];
+    const p2 = [143, 260];
+    const p3 = [200, 300];
+    ctx.moveTo(p0[0], p0[1]);
+    ctx.bezierCurveTo(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(p0[0], p0[1]);
+    ctx.lineWidth = 1;
+    [p1, p2, p3].forEach((p) => {
+      ctx.lineTo(p[0], p[1]);
+    });
+    ctx.strokeStyle = 'blue';
+    ctx.stroke();
+  };
+
+  const drawRight = () => {
+    ctx.beginPath();
+    const p0 = [200, 200];
+    const p1 = [290, 165];
+    const p2 = [257, 260];
+    const p3 = [200, 300];
+    ctx.moveTo(p0[0], p0[1]);
+    ctx.bezierCurveTo(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(p0[0], p0[1]);
+    ctx.lineWidth = 1;
+    [p1, p2, p3].forEach((p) => {
+      ctx.lineTo(p[0], p[1]);
+    });
+    ctx.strokeStyle = 'blue';
+    ctx.stroke();
+  };
+  drawLeft();
+  drawRight();
+}
+
 export const drawFns = {
+  love,
   brick,
   'pie-chart': pieChart,
   histogram,
@@ -301,4 +363,5 @@ export const drawFns = {
   arc,
   rect,
   ticTac,
+  test,
 };
