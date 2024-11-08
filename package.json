@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@leafer-in/animate": "^1.0.5",
-    "@leafer-in/editor": "^1.0.4",
+    "@leafer-in/editor": "^1.0.5",
     "@leafer-in/state": "^1.0.5",
-    "@leafer-in/view": "^1.0.4",
+    "@leafer-in/view": "^1.0.5",
     "allotment": "^1.20.2",
     "antd": "^5.20.1",
     "classnames": "^2.5.1",

@@ -26,6 +26,10 @@ const data = [
     name: '时钟',
     path: '/clock',
   },
+  {
+    name: '形状编辑器',
+    path: '/shape-editor',
+  },
 ];
 
 export default function Page() {

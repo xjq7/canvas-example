@@ -313,7 +313,7 @@ function love(ctx: CanvasRenderingContext2D) {
     const p0 = [200, 200];
     const p1 = [110, 170];
     const p2 = [143, 260];
-    const p3 = [200, 300];
+    const p3 = [200, 295];
     ctx.moveTo(p0[0], p0[1]);
     ctx.bezierCurveTo(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
     ctx.fillStyle = 'red';
@@ -334,7 +334,7 @@ function love(ctx: CanvasRenderingContext2D) {
     const p0 = [200, 200];
     const p1 = [290, 165];
     const p2 = [257, 260];
-    const p3 = [200, 300];
+    const p3 = [200, 295];
     ctx.moveTo(p0[0], p0[1]);
     ctx.bezierCurveTo(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
     ctx.fillStyle = 'red';

@@ -8,6 +8,7 @@ import MineSweeper from './pages/minesweeper';
 import G2048 from './pages/2048';
 import Editor from './pages/editor';
 import Clock from './pages/clock';
+import ShapeEditor from './pages/shape-editor';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: '/clock',
     element: <Clock />,
+  },
+  {
+    path: '/shape-editor',
+    element: <ShapeEditor />,
   },
 ]);
 
