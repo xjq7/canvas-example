@@ -1,5 +1,5 @@
 import { EditorMoveEvent } from '@leafer-in/editor';
-import { App, Ellipse, Pen } from 'leafer-ui';
+import { App, Ellipse, Pen, PointerEvent, UI } from 'leafer-ui';
 
 const circleRadius = 14;
 
@@ -7,10 +7,58 @@ export interface IConfig {
   points: { x; y }[];
 }
 
+export interface IEditorConfig {
+  onMove?: (e) => void;
+  onMoveEnd?: (e) => void;
+  onTap?: (e) => void;
+}
+
 class Editor {
   app: App;
-  constructor(app: App) {
+  config: IEditorConfig;
+  isMouseDown: boolean;
+  selector: UI;
+
+  constructor(app: App, config: IEditorConfig) {
     this.app = app;
+    this.config = config;
+
+    this.app.on(PointerEvent.MOVE, (e) => {
+      const { x, y } = e;
+
+      if (this.isMouseDown) {
+        if (this.selector) {
+          this.selector.x = x;
+          this.selector.y = y;
+          this.config?.onMove({ target: this.selector, x, y });
+        }
+      }
+    });
+
+    this.app.on(PointerEvent.DOWN, (e) => {
+      this.isMouseDown = true;
+      if (this.app !== e.target) {
+        this.selector = e.target;
+      }
+    });
+
+    this.app.on(PointerEvent.UP, (e) => {
+      this.isMouseDown = false;
+      console.log(e);
+
+      this.config?.onMoveEnd({ target: e.target });
+    });
+
+    this.app.on(PointerEvent.TAP, (e) => {
+      const { x, y } = e;
+
+      if (this.app === e.target) {
+        this.selector = null;
+      } else {
+        this.selector = e.target;
+        this.config?.onTap({ target: e.target, x, y });
+      }
+    });
   }
 }
 
@@ -18,7 +66,7 @@ export default class ShapeEditor {
   app: App;
   editor: Editor;
 
-  moveTarget;
+  selector: Ellipse;
   points: Ellipse[] = [];
 
   config: IConfig = { points: [] };
@@ -32,36 +80,15 @@ export default class ShapeEditor {
     this.config = config;
     this.app = new App({ view: window, tree: {} });
 
-    this.editor = new Editor(this.app);
-
-    // this.app.on(PointerEvent.MOVE, (e) => {
-    //   const { x, y } = e;
-
-    //   if (this.moveTarget) {
-    //     this.moveTarget.x = x;
-    //     this.moveTarget.y = y;
-    //     this.drawPolygon();
-    //     this.genSelectBox(this.moveTarget);
-
-    //     this.genEditPoints();
-    //   }
-    // });
-
-    // this.app.on(PointerEvent.TAP, (e) => {
-    //   if (e.target !== this.selector) {
-    //     this.clearEditPoints();
-    //     this.clearSelectBox();
-    //   }
-
-    //   const { x, y } = e;
-
-    //   if (e.target === this.polygon) {
-    //     this.addPoint(x - circleRadius / 2, y - circleRadius / 2);
-    //   }
-    // });
+    this.editor = new Editor(this.app, {
+      onMove: (e) => {
+        this.drawPolygon();
+      },
+      onTap(e) {},
+      onMoveEnd(e) {},
+    });
 
     this.drawPoints(points);
-    // this.drawPolygon();
 
     // this.polygon.setStyle({ fill: 'black' });
     // this.app.tree.add(this.polygon);
@@ -121,37 +148,12 @@ export default class ShapeEditor {
       console.log(e.target);
     });
 
-    // arc.on(PointerEvent.DOWN, (e) => {
-    //   this.moveTarget = e.target;
-    // });
-
     // arc.on(PointerEvent.CLICK, (e) => {
     //   this.genEditPoints();
     // });
 
-    // arc.on(PointerEvent.UP, (e) => {
-    //   this.moveTarget = null;
-    // });
-    function getCentroid(points) {
-      let xSum = 0,
-        ySum = 0;
-      for (const point of points) {
-        xSum += point.x;
-        ySum += point.y;
-      }
-      return { x: xSum / points.length, y: ySum / points.length };
-    }
-
     this.points.push(arc);
-    this.points = sortPoints(this.points);
-    function sortPoints(points) {
-      const centroid = getCentroid(points);
-      return points.sort((a, b) => {
-        const angleA = Math.atan2(a.y - centroid.y, a.x - centroid.x);
-        const angleB = Math.atan2(b.y - centroid.y, b.x - centroid.x);
-        return angleB - angleA; // 顺时针排序
-      });
-    }
+
     this.app.tree.add(arc);
   }
 
@@ -179,28 +181,28 @@ export default class ShapeEditor {
     this.polygon.setStyle({ stroke: '#FF4B4B' });
     this.polygon.moveTo(points[0].x, points[0].y);
 
-    // if (this.selector) {
-    //   const selectIdx = this.points.findIndex(
-    //     (point) => point === this.selector
-    //   );
+    if (this.selector) {
+      const selectIdx = this.points.findIndex(
+        (point) => point === this.selector
+      );
 
-    //   this.polygon.moveTo(
-    //     this.points[selectIdx - 1].x + circleRadius / 2,
-    //     this.points[selectIdx - 1].y + circleRadius / 2
-    //   );
-    //   this.polygon.quadraticCurveTo(
-    //     this.lPoint.x,
-    //     this.lPoint.y,
-    //     this.points[selectIdx].x + circleRadius / 2,
-    //     this.points[selectIdx].y + circleRadius / 2
-    //   );
-    //   this.polygon.quadraticCurveTo(
-    //     this.rPoint.x,
-    //     this.rPoint.y,
-    //     this.points[selectIdx + 1].x + circleRadius / 2,
-    //     this.points[selectIdx + 1].y + circleRadius / 2
-    //   );
-    // }
+      this.polygon.moveTo(
+        this.points[selectIdx - 1].x + circleRadius / 2,
+        this.points[selectIdx - 1].y + circleRadius / 2
+      );
+      this.polygon.quadraticCurveTo(
+        this.lPoint.x,
+        this.lPoint.y,
+        this.points[selectIdx].x + circleRadius / 2,
+        this.points[selectIdx].y + circleRadius / 2
+      );
+      this.polygon.quadraticCurveTo(
+        this.rPoint.x,
+        this.rPoint.y,
+        this.points[selectIdx + 1].x + circleRadius / 2,
+        this.points[selectIdx + 1].y + circleRadius / 2
+      );
+    }
 
     points.slice(2).forEach((point) => {
       this.polygon.lineTo(point.x, point.y);
