@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useWindowSize } from 'react-use';
-import ShapeEditor from './shapeEditor';
+import ShapeEditor from './shape';
 
 export default function Component() {
   const { width, height } = useWindowSize();
