@@ -12,9 +12,10 @@ export default function Component() {
     { x: centerX + 80, y: centerY },
     { x: centerX + 80, y: centerY + 80 },
     { x: centerX - 40, y: centerY + 160 },
-    { x: centerX - 160, y: centerY + 160 },
-    { x: centerX - 200, y: centerY + 80 },
-    { x: centerX - 200, y: centerY },
+    { x: centerX + 200 - 160, y: centerY + 200 + 160 },
+    { x: centerX + 200 - 200, y: centerY + 200 + 80 },
+    { x: centerX + 200 - 200, y: centerY + 200 },
+    { x: 500, y: 500 },
   ];
 
   useEffect(() => {

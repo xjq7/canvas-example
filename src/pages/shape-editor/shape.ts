@@ -164,7 +164,7 @@ export default class ShapeEditor {
       return { x: x + circleRadius / 2, y: y + circleRadius / 2 };
     });
 
-    this.pen.setStyle({ stroke: '#FF4B4B' });
+    this.pen.setStyle({ stroke: 'lime', fill: '#FF4B4B' });
 
     this.pen.moveTo(points[0].x, points[0].y);
     points.forEach((point, index) => {
@@ -189,7 +189,9 @@ export default class ShapeEditor {
       }
 
       if (!controlLeft && !controlRight) {
-        this.pen.lineTo(rightPoint.x, rightPoint.y);
+        rightPoint.x > 500
+          ? this.pen.moveTo(rightPoint.x, rightPoint.y)
+          : this.pen.lineTo(rightPoint.x, rightPoint.y);
       } else if (controlLeft && !controlRight) {
         this.pen.quadraticCurveTo(
           controlLeft.offsetX + leftPoint.x,
