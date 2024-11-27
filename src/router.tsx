@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/home';
-import Leafer from './pages/leafer';
 import Jigsaw from './pages/jigsaw';
 import Pageflip from './pages/pageflip';
 import Practice from './pages/practice';
@@ -15,11 +14,6 @@ const router = createBrowserRouter([
     path: '/',
     element: <Home />,
   },
-  {
-    path: '/leafer',
-    element: <Leafer />,
-  },
-
   {
     path: '/jigsaw',
     element: <Jigsaw />,
