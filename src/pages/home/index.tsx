@@ -7,6 +7,10 @@ const data = [
     path: '/practice',
   },
   {
+    name: 'Leafer',
+    path: '/leafer',
+  },
+  {
     name: '翻书',
     path: '/pageflip',
   },
