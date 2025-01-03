@@ -23,16 +23,12 @@ const data = [
     path: '/minesweeper',
   },
   {
-    name: '编辑器',
-    path: '/editor',
-  },
-  {
     name: '时钟',
     path: '/clock',
   },
   {
-    name: '形状编辑器',
-    path: '/shape-editor',
+    name: '雪花',
+    path: '/snowflake',
   },
 ];
 

@@ -8,6 +8,7 @@ import G2048 from './pages/2048';
 import Editor from './pages/editor';
 import Clock from './pages/clock';
 import ShapeEditor from './pages/shape-editor';
+import Snowflake from './pages/snowflake';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/shape-editor',
     element: <ShapeEditor />,
+  },
+  {
+    path: '/snowflake',
+    element: <Snowflake />,
   },
 ]);
 

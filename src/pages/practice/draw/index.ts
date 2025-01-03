@@ -353,6 +353,8 @@ function love(ctx: CanvasRenderingContext2D) {
   drawRight();
 }
 
+
+
 export const drawFns = {
   love,
   brick,
