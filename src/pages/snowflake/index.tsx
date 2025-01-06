@@ -49,6 +49,7 @@ export default function Component() {
         />
         &nbsp;&nbsp;&nbsp;&nbsp; 雪花风格: &nbsp;
         <Select
+          value={config.types}
           mode="tags"
           style={{ width: 240 }}
           maxTagCount={2}
