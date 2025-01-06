@@ -23,7 +23,7 @@ export default class Snowflake {
     const {
       density = 30,
       speed = {
-        x: 0.08,
+        x: 0.05,
         y: 1.5,
       },
     } = config;
@@ -44,7 +44,7 @@ export default class Snowflake {
       const x = Math.random() * this.leafer.width;
       const y = Math.random() * this.leafer.height * 0.9;
 
-      const size = utils.randomValue(0.8, 1.3, true);
+      const size = utils.randomValue(1.2, 1.5, true);
 
       this.drawSnowflake(x, y, size);
     }
@@ -72,7 +72,7 @@ export default class Snowflake {
       data: {
         speedX: Math.random() > 0.5 ? speed.x : -speed.x,
         speedY: utils.randomValue(0.05, 0.15),
-        directionInterval: utils.randomValue(300, 600),
+        directionInterval: utils.randomValue(500, 800),
       },
       around: 'center',
     });
@@ -80,19 +80,17 @@ export default class Snowflake {
     this.leafer.add(snowflake);
 
     const down = () => {
-      snowflake.y += utils.randomValue(0.15, 0.19, true);
-
-      snowflake.data.speedX += Math.random() * 0.003 - 0.0015;
+      snowflake.y += utils.randomValue(0.12, 0.16, true);
 
       snowflake.data.directionInterval--;
 
       if (
         snowflake.x < 0 ||
         snowflake.x > this.leafer.width ||
-        snowflake.data.directionInterval < 0
+        (snowflake.data.directionInterval < 0 && Math.random() > 0.5)
       ) {
         snowflake.data.speedX = -snowflake.data.speedX;
-        snowflake.data.directionInterval = utils.randomValue(225, 450);
+        snowflake.data.directionInterval = utils.randomValue(500, 800);
       }
 
       snowflake.x += snowflake.data.speedX;
