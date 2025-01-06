@@ -6,11 +6,11 @@ export default function Component() {
     <div>
       <Router />
       <a
-        className="w-[50px] h-[50px] flex items-center justify-center fixed right-0 top-0 cursor-pointer z-[999]"
+        className="w-[50px] h-[50px] flex items-center justify-center fixed right-0 top-0 cursor-pointer z-[999] "
         href="https://github.com/xjq7/canvas-example"
         target="_blank"
       >
-        <img src={GithubSvg} className="w-[40px] h-[40px]" />
+        <img src={GithubSvg} className="w-[40px] h-[40px] bg-white" />
       </a>
     </div>
   );

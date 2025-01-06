@@ -1,8 +1,7 @@
 import { Leafer, Path } from 'leafer-ui';
 import * as utils from '@/utils/utils';
 import { snowflakePath } from './constants';
-
-const snowflakeTypes = Object.keys(snowflakePath);
+import { shadowEqual } from '@/utils/utils';
 
 export interface SnowflakeConfig {
   view: HTMLCanvasElement | string;
@@ -13,6 +12,7 @@ export interface SnowflakeConfig {
   };
   width: number;
   height: number;
+  types: string[];
 }
 
 export default class Snowflake {
@@ -23,7 +23,7 @@ export default class Snowflake {
     const {
       density = 30,
       speed = {
-        x: 0.1,
+        x: 0.08,
         y: 1.5,
       },
     } = config;
@@ -44,7 +44,7 @@ export default class Snowflake {
       const x = Math.random() * this.leafer.width;
       const y = Math.random() * this.leafer.height * 0.9;
 
-      const size = utils.randomValue(0.5, 1.2, true);
+      const size = utils.randomValue(0.8, 1.3, true);
 
       this.drawSnowflake(x, y, size);
     }
@@ -52,10 +52,11 @@ export default class Snowflake {
 
   drawSnowflake(x: number, y: number, size: number) {
     const { speed } = this.config;
-    const pathIdx = utils.randomValue(0, snowflakeTypes.length);
+    const { types } = this.config;
+    const pathIdx = utils.randomValue(0, types.length);
 
     const snowflake = new Path({
-      path: snowflakePath[snowflakeTypes[pathIdx]],
+      path: snowflakePath[types[pathIdx]],
       fill: 'white',
       scale: size / 3,
       rotation: 0,
@@ -70,7 +71,8 @@ export default class Snowflake {
       y,
       data: {
         speedX: Math.random() > 0.5 ? speed.x : -speed.x,
-        speedY: speed.y,
+        speedY: utils.randomValue(0.05, 0.15),
+        directionInterval: utils.randomValue(300, 600),
       },
       around: 'center',
     });
@@ -78,10 +80,19 @@ export default class Snowflake {
     this.leafer.add(snowflake);
 
     const down = () => {
-      snowflake.y += 0.2;
+      snowflake.y += utils.randomValue(0.15, 0.19, true);
 
-      if (snowflake.x < 0 || snowflake.x > this.leafer.width) {
+      snowflake.data.speedX += Math.random() * 0.003 - 0.0015;
+
+      snowflake.data.directionInterval--;
+
+      if (
+        snowflake.x < 0 ||
+        snowflake.x > this.leafer.width ||
+        snowflake.data.directionInterval < 0
+      ) {
         snowflake.data.speedX = -snowflake.data.speedX;
+        snowflake.data.directionInterval = utils.randomValue(225, 450);
       }
 
       snowflake.x += snowflake.data.speedX;
@@ -95,6 +106,11 @@ export default class Snowflake {
   }
 
   update(config: Partial<SnowflakeConfig>) {
+    const mergeConfig = { ...this.config, ...config };
+
+    if (shadowEqual(this.config, mergeConfig)) {
+      return;
+    }
     this.config = { ...this.config, ...config };
 
     this.draw();

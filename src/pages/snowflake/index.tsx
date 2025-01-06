@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
+import { InputNumber, Select } from 'antd';
+import { useDebounce, useUpdateEffect, useWindowSize } from 'react-use';
 import Snowflake, { SnowflakeConfig } from './snowflake';
+
 import S from './index.module.less';
-import { InputNumber } from 'antd';
-import { useDebounce, useWindowSize } from 'react-use';
 
 const defaultConfig: SnowflakeConfig = {
-  density: 10,
+  density: 25,
   view: 'snowflake',
   width: window.innerWidth,
   height: window.innerHeight,
+  types: ['type1', 'type2', 'type3', 'type4', 'type5', 'type6'],
 };
 
 export default function Component() {
@@ -29,7 +31,7 @@ export default function Component() {
     [config]
   );
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     setConfig((prev) => ({ ...prev, width, height }));
   }, [width, height]);
 
@@ -44,6 +46,42 @@ export default function Component() {
           onChange={(val) => {
             setConfig({ ...config, density: val });
           }}
+        />
+        &nbsp;&nbsp;&nbsp;&nbsp; 雪花风格: &nbsp;
+        <Select
+          mode="tags"
+          style={{ width: 240 }}
+          maxTagCount={2}
+          placeholder="雪花风格"
+          onChange={(value) => {
+            setConfig({ ...config, types: value });
+          }}
+          options={[
+            {
+              value: 'type1',
+              label: 'type1',
+            },
+            {
+              value: 'type2',
+              label: 'type2',
+            },
+            {
+              value: 'type3',
+              label: 'type3',
+            },
+            {
+              value: 'type4',
+              label: 'type4',
+            },
+            {
+              value: 'type5',
+              label: 'type5',
+            },
+            {
+              value: 'type6',
+              label: 'type6',
+            },
+          ]}
         />
       </div>
       <div id="snowflake" className="flex items-center justify-center"></div>
