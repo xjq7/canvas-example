@@ -1,21 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { useWindowSize, useMount } from 'react-use';
 
 export default function Component() {
-  const canvasRef = useRef<HTMLCanvasElement>();
+  const [config, setConfig] = useState({});
+  const { width, height } = useWindowSize();
 
-  const draw = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvasRef.current.getContext('2d');
-    console.log(canvas, ctx);
-  };
-
-  useEffect(() => {
-    draw();
-  }, []);
+  useMount(() => {});
 
   return (
     <div className="w-[100vw] h-[100vh] flex items-center justify-center background-[#aaa] flex-col">
-      <canvas width={600} height={600} ref={canvasRef}></canvas>
+      <div id="" className="flex items-center justify-center"></div>
     </div>
   );
 }

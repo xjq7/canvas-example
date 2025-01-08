@@ -9,6 +9,7 @@ import Editor from './pages/editor';
 import Clock from './pages/clock';
 import ShapeEditor from './pages/shape-editor';
 import Snowflake from './pages/snowflake';
+import MarchingMusic from './pages/marching-music';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: '/snowflake',
     element: <Snowflake />,
+  },
+  {
+    path: '/marching-music',
+    element: <MarchingMusic />,
   },
 ]);
 

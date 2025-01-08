@@ -30,6 +30,10 @@ const data = [
     name: '雪花',
     path: '/snowflake',
   },
+  {
+    name: '音乐律动',
+    path: '/marching-music',
+  },
 ];
 
 export default function Page() {
