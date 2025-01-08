@@ -54,6 +54,10 @@ export default function Component() {
       width: window.innerWidth,
       height: window.innerHeight,
     });
+
+    return () => {
+      marchingMusicRef.current.destroy();
+    };
   }, []);
 
   const [,] = useDebounce(

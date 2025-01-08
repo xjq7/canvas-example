@@ -28,6 +28,10 @@ export class MarchingMusic {
     this.reDraw();
   }
 
+  destroy() {
+    this.leafer.destroy();
+  }
+
   reDraw() {
     this.start = {
       x: (window.innerWidth - 860) / 2,
