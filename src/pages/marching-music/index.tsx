@@ -13,6 +13,7 @@ export default function Component() {
   const [file, setFile] = useState<File>();
   const [rhythmMode, setRhythmMode] = useState<RhythmMode>('spectrogram');
   const rhythmModeRef = useRef<RhythmMode>();
+  const lightInterval = useRef<any>();
 
   const handleSelectAudio = () => {
     inputRef.current.click();
@@ -50,11 +51,16 @@ export default function Component() {
 
       source.onended = () => {
         marchingMusicRef.current.closeLight();
+        clearInterval(lightInterval.current);
+        lightInterval.current = null;
       };
 
-      function animate() {
-        requestAnimationFrame(animate);
+      if (lightInterval.current) {
+        clearInterval(lightInterval.current);
+        lightInterval.current = null;
+      }
 
+      lightInterval.current = setInterval(() => {
         if (rhythmModeRef.current === 'spectrogram') {
           const dataArray = new Uint8Array(analyser.frequencyBinCount);
           analyser.getByteFrequencyData(dataArray);
@@ -62,8 +68,7 @@ export default function Component() {
         } else {
           // marchingMusicRef.current.drawWaveLight();
         }
-      }
-      animate();
+      }, 96);
     };
 
     reader.readAsArrayBuffer(file);
