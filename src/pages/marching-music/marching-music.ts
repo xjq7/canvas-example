@@ -1,4 +1,4 @@
-import { Group, Leafer, Rect, Text } from 'leafer-ui';
+import { Group, Leafer, PointerEvent, Rect, Text } from 'leafer-ui';
 import { keyboards } from './constants';
 
 interface IMarchingMusicConfig {}
@@ -10,12 +10,15 @@ export class MarchingMusic {
   config: IMarchingMusicConfig;
   start: { x: number; y: number };
   color: string = colors[0];
+  center?: Rect;
+  container?: Group;
 
   constructor(config: IMarchingMusicConfig) {
     this.config = config;
     setInterval(() => {
       this.color = colors[Math.round(Math.random() * 3)];
     }, 2000);
+
     this.leafer = new Leafer({ view: window });
   }
 
@@ -37,24 +40,63 @@ export class MarchingMusic {
       x: (window.innerWidth - 860) / 2,
       y: (window.innerHeight - 350) / 2,
     };
-    this.drawKeyboard();
-  }
-
-  drawKeyboard() {
-    this.leafer.clear();
 
     const containerX = this.start.x;
     const containerY = this.start.y;
 
-    const container = new Group({
+    this.container = new Group({
       x: containerX,
       y: containerY,
     });
-    this.leafer.add(container);
+    this.leafer.add(this.container);
+
+    const getBoard = (target) => {
+      let board = target;
+      if (board.tag === 'Text') {
+        board = target.data.board;
+      }
+      if (board && board.data.isBoard) {
+        return board;
+      }
+      return null;
+    };
+
+    this.container.on_(PointerEvent.DOWN, (e) => {
+      if (e.target === this.container) return;
+      const board = getBoard(e.target);
+      if (board) {
+        board.shadow = {
+          x: 0,
+          y: 0,
+          blur: 12,
+          color: this.color,
+        };
+        board.data.isDown = true;
+      }
+    });
+
+    this.container.on_(PointerEvent.UP, (e) => {
+      if (e.target === this.container) return;
+      const board = getBoard(e.target);
+      if (board) {
+        board.data.isDown = false;
+        if (board.shadow) {
+          setTimeout(() => {
+            board.shadow = undefined;
+          }, 120);
+        }
+      }
+    });
+
+    this.drawKeyboard();
+  }
+
+  drawKeyboard() {
+    this.container.clear();
 
     keyboards.forEach((keyboard) => {
       const { x, y } = keyboard;
-      const { width, height, fill, text } = keyboard;
+      const { width, height, fill, text, type } = keyboard;
 
       const board = new Rect({
         x,
@@ -63,8 +105,18 @@ export class MarchingMusic {
         height,
         fill,
         cornerRadius: 5,
+        cursor: 'pointer',
+        data: {
+          isBoard: true,
+          type,
+        },
       });
-      container.add(board);
+
+      if (type === 'y') {
+        this.center = board;
+      }
+
+      this.container.add(board);
 
       if (text) {
         let fontSize = 18;
@@ -101,14 +153,18 @@ export class MarchingMusic {
           fill: 'white',
           textAlign: 'center',
           verticalAlign: 'middle',
+          data: {
+            board,
+          },
+          cursor: 'pointer',
         });
 
-        container.add(textNode);
+        this.container.add(textNode);
       }
     });
   }
 
-  drawLight(audiosData: Uint8Array<any>) {
+  drawBarLight(audiosData: Uint8Array<any>) {
     const keyboards = this.leafer.children[0].children;
 
     const segmentSize = 64;
@@ -142,10 +198,11 @@ export class MarchingMusic {
 
       const freq = freqs[xIdx];
       const f = freq / 255;
-      console.log(yIdx, Math.round(f * 6));
 
       if (6 - yIdx > Math.round(f * 6)) {
-        keyboard.shadow = undefined;
+        if (!keyboard.data.isDown) {
+          keyboard.shadow = undefined;
+        }
       } else {
         keyboard.shadow = {
           x: 0,
@@ -154,6 +211,44 @@ export class MarchingMusic {
           color: this.color,
         };
       }
+    });
+  }
+
+  drawWaveLight() {
+    // const { x, y, width, height } = this.center;
+
+    const firstRound = [];
+
+    this.container.children.forEach((keyboard) => {
+      if (['t', '^6', '&7', 'u', 'h', 'g'].includes(keyboard.data.type)) {
+        firstRound.push(keyboard);
+      }
+    });
+
+    firstRound.forEach((keyboard) => {
+      if (true) {
+        keyboard.shadow = {
+          x: 0,
+          y: 0,
+          blur: 12,
+          color: this.color,
+        };
+      } else {
+        keyboard.shadow = undefined;
+      }
+    });
+
+    this.center.shadow = {
+      x: 0,
+      y: 0,
+      blur: 12,
+      color: this.color,
+    };
+  }
+
+  closeLight() {
+    this.container?.children.forEach((keyboard) => {
+      keyboard.shadow = undefined;
     });
   }
 }

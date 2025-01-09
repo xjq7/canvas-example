@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDebounce, useWindowSize } from 'react-use';
-
-import S from './index.module.less';
+import { Button, Row, Select } from 'antd';
+// import Meyda from 'meyda';
 import { MarchingMusic } from './marching-music';
-import { Button, Row } from 'antd';
+import { RhythmMode } from './type';
+import S from './index.module.less';
 
 export default function Component() {
   const { width, height } = useWindowSize();
   const marchingMusicRef = useRef<MarchingMusic>();
   const inputRef = useRef<HTMLInputElement>();
   const [file, setFile] = useState<File>();
+  const [rhythmMode, setRhythmMode] = useState<RhythmMode>('spectrogram');
+  const rhythmModeRef = useRef<RhythmMode>();
 
   const handleSelectAudio = () => {
     inputRef.current.click();
@@ -31,17 +34,34 @@ export default function Component() {
 
       // 创建分析器
       const analyser = audioContext.createAnalyser();
+
+      // const meydaAnalyzer = Meyda.createMeydaAnalyzer({
+      //   audioContext: audioContext,
+      //   source: source, // 连接到音频源
+      //   bufferSize: 512,
+      // });
+
+      // 启动音频处理
+      // meydaAnalyzer.start();
+
       source.connect(analyser);
       analyser.connect(audioContext.destination);
       source.start(0);
 
-      // 律动效果
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      source.onended = () => {
+        marchingMusicRef.current.closeLight();
+      };
 
       function animate() {
         requestAnimationFrame(animate);
-        analyser.getByteFrequencyData(dataArray);
-        marchingMusicRef.current.drawLight(dataArray);
+
+        if (rhythmModeRef.current === 'spectrogram') {
+          const dataArray = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(dataArray);
+          marchingMusicRef.current.drawBarLight(dataArray);
+        } else {
+          // marchingMusicRef.current.drawWaveLight();
+        }
       }
       animate();
     };
@@ -59,6 +79,11 @@ export default function Component() {
       marchingMusicRef.current.destroy();
     };
   }, []);
+
+  useEffect(() => {
+    rhythmModeRef.current = rhythmMode;
+    marchingMusicRef.current?.closeLight();
+  }, [rhythmMode]);
 
   const [,] = useDebounce(
     () => {
@@ -83,7 +108,27 @@ export default function Component() {
           <Button type="primary" onClick={handleSelectAudio}>
             选取音乐
           </Button>
-          <div className={S.fileName}>{file?.name || ''}</div>
+          <div className={S.fileName}>{file?.name || '暂未选取音乐'}</div>
+          <div className="ml-3">律动模式: </div>
+          <Select<RhythmMode>
+            className="ml-3 w-[100px]"
+            defaultValue="spectrogram"
+            value={rhythmMode}
+            onChange={(val) => {
+              setRhythmMode(val);
+            }}
+            options={[
+              {
+                label: '频谱',
+                value: 'spectrogram',
+              },
+              // {
+              //   label: '波形',
+              //   value: 'wave',
+              // },
+            ]}
+            placeholder="律动模式"
+          ></Select>
         </Row>
       </div>
       <div
