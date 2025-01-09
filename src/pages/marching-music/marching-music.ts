@@ -36,6 +36,7 @@ export class MarchingMusic {
   }
 
   reDraw() {
+    if (this.container) this.leafer.remove(this.container);
     this.start = {
       x: (window.innerWidth - 860) / 2,
       y: (window.innerHeight - 350) / 2,
