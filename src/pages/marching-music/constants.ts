@@ -345,7 +345,7 @@ function genKeyboardData() {
         width: 50,
         height: 50,
         fill: '#ccccd6',
-        type: '[{',
+        type: '{[',
         text: {
           label: ['{', '['],
           fontSize: 14,
@@ -541,7 +541,7 @@ function genKeyboardData() {
         width: 50,
         height: 50,
         fill: '#ccccd6',
-        type: '《<',
+        type: '<',
         text: {
           label: ['<'],
           fontSize: 16,
@@ -551,7 +551,7 @@ function genKeyboardData() {
         width: 50,
         height: 50,
         fill: '#ccccd6',
-        type: '》>',
+        type: '>',
         text: {
           label: ['>'],
           fontSize: 16,
@@ -623,7 +623,7 @@ function genKeyboardData() {
         width: 290,
         height: 50,
         fill: '#ccccd6',
-        type: 'whitespace',
+        type: 'space',
       },
       {
         width: 65,

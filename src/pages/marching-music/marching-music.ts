@@ -1,4 +1,6 @@
 import { Group, Leafer, PointerEvent, Rect, Text } from 'leafer-ui';
+import { Animate } from '@leafer-in/animate';
+
 import { keyboards } from './constants';
 
 interface IMarchingMusicConfig {}
@@ -12,6 +14,7 @@ export class MarchingMusic {
   color: string = colors[0];
   center?: Rect;
   container?: Group;
+  waveData?: Rect[][];
 
   constructor(config: IMarchingMusicConfig) {
     this.config = config;
@@ -24,18 +27,14 @@ export class MarchingMusic {
 
   update(config: Partial<IMarchingMusicConfig>) {
     this.config = { ...this.config, ...config };
-    this.reDraw();
-  }
-
-  draw() {
-    this.reDraw();
+    this.draw();
   }
 
   destroy() {
     this.leafer.destroy();
   }
 
-  reDraw() {
+  draw() {
     if (this.container) this.leafer.remove(this.container);
     this.start = {
       x: (window.innerWidth - 860) / 2,
@@ -90,6 +89,79 @@ export class MarchingMusic {
     });
 
     this.drawKeyboard();
+    this.calWaveData();
+  }
+
+  calWaveData() {
+    const steps = [
+      ['t', '^6', '&7', 'u', 'h', 'g'],
+      ['%5', 'f5', 'f6', 'f7', '*8', 'i', 'j', 'n', 'b', 'v', 'f', 'r'],
+      ['¥$4', 'f4', 'e', 'd', 'c', 'space', 'f8', '(9', 'o', 'k', 'm'],
+      ['f3', '#3', 'w', 's', 'x', 'f9', ')0', 'p', 'l', '<', 'space'],
+      [
+        'f2',
+        '@2',
+        'q',
+        'a',
+        'z',
+        'left command',
+        'f10',
+        '——-',
+        '{[',
+        ':;',
+        '>',
+        'right command',
+      ],
+      [
+        'f1',
+        '!1',
+        'Tab',
+        'Caps Lock',
+        'left shift',
+        'left option',
+        'f11',
+        '+=',
+        ']}',
+        '"',
+        '?/',
+        'right option',
+      ],
+      [
+        'esc',
+        'fn',
+        'control',
+        '~·',
+        'f12',
+        'back',
+        '|\\',
+        'enter',
+        'right shift',
+        'top arrow',
+        'left arrow',
+      ],
+      ['figure', 'bottom arrow', 'right arrow'],
+    ];
+
+    const stepsLevel = steps.reduce((acc, cur, idx) => {
+      cur.forEach((val) => {
+        acc.set(val, idx);
+      });
+      return acc;
+    }, new Map());
+
+    this.waveData = [[], [], [], [], [], [], [], []];
+
+    this.container.children.forEach((keyboard) => {
+      const { isBoard, type } = keyboard.data;
+
+      if (isBoard) {
+        const level = stepsLevel.get(type);
+
+        if (level !== undefined) {
+          this.waveData[level].push(keyboard as Rect);
+        }
+      }
+    });
   }
 
   drawKeyboard() {
@@ -166,7 +238,7 @@ export class MarchingMusic {
   }
 
   drawBarLight(audiosData: Uint8Array<any>) {
-    const keyboards = this.leafer.children[0].children;
+    const keyboards = this.container.children;
 
     const segmentSize = 64;
 
@@ -215,29 +287,67 @@ export class MarchingMusic {
     });
   }
 
-  drawWaveLight() {
-    // const { x, y, width, height } = this.center;
+  drawWaveLight(dataArray: Uint8Array<any>) {
+    // 强度
+    let intensity = 0;
 
-    const firstRound = [];
-
-    this.container.children.forEach((keyboard) => {
-      if (['t', '^6', '&7', 'u', 'h', 'g'].includes(keyboard.data.type)) {
-        firstRound.push(keyboard);
+    for (let i = 0; i < dataArray.length; i++) {
+      if (dataArray[i] > 200 || dataArray[i] < 50) {
+        intensity = 3;
+        break;
+      } else if (dataArray[i] > 175 || dataArray[i] < 75) {
+        intensity = 2;
+        break;
+      } else if (dataArray[i] > 150 || dataArray[i] < 50) {
+        intensity = 1;
+        break;
       }
-    });
+    }
 
-    firstRound.forEach((keyboard) => {
-      if (true) {
+    if (intensity === 1) {
+      this.waveData[0].forEach((keyboard) => {
         keyboard.shadow = {
           x: 0,
           y: 0,
           blur: 12,
           color: this.color,
         };
-      } else {
+      });
+      this.waveData[1].forEach((keyboard) => {
         keyboard.shadow = undefined;
+      });
+    } else if (intensity === 2) {
+      this.waveData[0].concat(this.waveData[1]).forEach((keyboard) => {
+        keyboard.shadow = {
+          x: 0,
+          y: 0,
+          blur: 12,
+          color: this.color,
+        };
+      });
+    } else if (intensity === 3) {
+      let i = 1;
+      while (i <= 6) {
+        this.waveData[i].forEach((keyboard) => {
+          new Animate(
+            keyboard,
+            [
+              {
+                shadow: {
+                  x: 0,
+                  y: 0,
+                  blur: 12,
+                  color: this.color,
+                },
+              },
+              { shadow: undefined },
+            ],
+            { duration: 1, delay: 0.12 * i }
+          );
+        });
+        i++;
       }
-    });
+    }
 
     this.center.shadow = {
       x: 0,

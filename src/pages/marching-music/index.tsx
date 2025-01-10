@@ -11,7 +11,7 @@ export default function Component() {
   const marchingMusicRef = useRef<MarchingMusic>();
   const inputRef = useRef<HTMLInputElement>();
   const [file, setFile] = useState<File>();
-  const [rhythmMode, setRhythmMode] = useState<RhythmMode>('spectrogram');
+  const [rhythmMode, setRhythmMode] = useState<RhythmMode>('wave');
   const rhythmModeRef = useRef<RhythmMode>();
   const lightInterval = useRef<any>();
 
@@ -66,7 +66,9 @@ export default function Component() {
           analyser.getByteFrequencyData(dataArray);
           marchingMusicRef.current.drawBarLight(dataArray);
         } else {
-          // marchingMusicRef.current.drawWaveLight();
+          const dataArray = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteTimeDomainData(dataArray);
+          marchingMusicRef.current.drawWaveLight(dataArray);
         }
       }, 96);
     };
@@ -127,10 +129,10 @@ export default function Component() {
                 label: '频谱',
                 value: 'spectrogram',
               },
-              // {
-              //   label: '波形',
-              //   value: 'wave',
-              // },
+              {
+                label: '波形',
+                value: 'wave',
+              },
             ]}
             placeholder="律动模式"
           ></Select>
