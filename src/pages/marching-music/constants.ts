@@ -377,7 +377,7 @@ function genKeyboardData() {
         width: 95,
         height: 50,
         fill: '#ccccd6',
-        type: 'cap',
+        type: 'caps lock',
         text: {
           label: 'Caps Lock',
           fontSize: 14,

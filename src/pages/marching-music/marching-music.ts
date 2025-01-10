@@ -115,8 +115,8 @@ export class MarchingMusic {
       [
         'f1',
         '!1',
-        'Tab',
-        'Caps Lock',
+        'tab',
+        'caps lock',
         'left shift',
         'left option',
         'f11',
@@ -292,10 +292,10 @@ export class MarchingMusic {
     let intensity = 0;
 
     for (let i = 0; i < dataArray.length; i++) {
-      if (dataArray[i] > 220 || dataArray[i] < 30) {
+      if (dataArray[i] > 200 || dataArray[i] < 40) {
         intensity = 3;
         break;
-      } else if (dataArray[i] > 190 || dataArray[i] < 60) {
+      } else if (dataArray[i] > 180 || dataArray[i] < 60) {
         intensity = 2;
         break;
       } else if (dataArray[i] > 160 || dataArray[i] < 80) {
