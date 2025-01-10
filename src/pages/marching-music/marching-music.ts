@@ -292,13 +292,13 @@ export class MarchingMusic {
     let intensity = 0;
 
     for (let i = 0; i < dataArray.length; i++) {
-      if (dataArray[i] > 200 || dataArray[i] < 50) {
+      if (dataArray[i] > 220 || dataArray[i] < 30) {
         intensity = 3;
         break;
-      } else if (dataArray[i] > 175 || dataArray[i] < 75) {
+      } else if (dataArray[i] > 190 || dataArray[i] < 60) {
         intensity = 2;
         break;
-      } else if (dataArray[i] > 150 || dataArray[i] < 50) {
+      } else if (dataArray[i] > 160 || dataArray[i] < 80) {
         intensity = 1;
         break;
       }
@@ -317,7 +317,16 @@ export class MarchingMusic {
         keyboard.shadow = undefined;
       });
     } else if (intensity === 2) {
-      this.waveData[0].concat(this.waveData[1]).forEach((keyboard) => {
+      this.waveData[0].forEach((keyboard) => {
+        keyboard.shadow = {
+          x: 0,
+          y: 0,
+          blur: 12,
+          color: this.color,
+        };
+      });
+
+      this.waveData[1].forEach((keyboard) => {
         keyboard.shadow = {
           x: 0,
           y: 0,
@@ -347,6 +356,10 @@ export class MarchingMusic {
         });
         i++;
       }
+    } else {
+      this.waveData[0].forEach((keyboard) => {
+        keyboard.shadow = undefined;
+      });
     }
 
     this.center.shadow = {
