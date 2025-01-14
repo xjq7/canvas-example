@@ -15,6 +15,8 @@ export class MarchingMusic {
   center?: Rect;
   container?: Group;
   waveData?: Rect[][];
+  waveLastTime?: number;
+  waveLastIntensity: number;
 
   constructor(config: IMarchingMusicConfig) {
     this.config = config;
@@ -303,7 +305,17 @@ export class MarchingMusic {
         break;
       }
     }
+    const now = Date.now();
 
+    if (this.waveLastTime) {
+      if (now - this.waveLastTime < 200) return;
+    }
+    this._drawWaveLight(intensity);
+    this.waveLastTime = now;
+    this.waveLastIntensity = intensity;
+  }
+
+  _drawWaveLight(intensity: number) {
     if (intensity === 1) {
       this.waveData[0].forEach((keyboard) => {
         keyboard.shadow = {
@@ -317,16 +329,7 @@ export class MarchingMusic {
         keyboard.shadow = undefined;
       });
     } else if (intensity === 2) {
-      this.waveData[0].forEach((keyboard) => {
-        keyboard.shadow = {
-          x: 0,
-          y: 0,
-          blur: 12,
-          color: this.color,
-        };
-      });
-
-      this.waveData[1].forEach((keyboard) => {
+      this.waveData[0].concat(this.waveData[1]).forEach((keyboard) => {
         keyboard.shadow = {
           x: 0,
           y: 0,
@@ -357,7 +360,7 @@ export class MarchingMusic {
         i++;
       }
     } else {
-      this.waveData[0].forEach((keyboard) => {
+      this.waveData[0].concat(this.waveData[1]).forEach((keyboard) => {
         keyboard.shadow = undefined;
       });
     }
