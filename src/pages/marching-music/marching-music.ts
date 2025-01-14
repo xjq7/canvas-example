@@ -308,7 +308,7 @@ export class MarchingMusic {
     const now = Date.now();
 
     if (this.waveLastTime) {
-      if (now - this.waveLastTime < 200) return;
+      // if (now - this.waveLastTime < 200) return;
     }
     this._drawWaveLight(intensity);
     this.waveLastTime = now;
