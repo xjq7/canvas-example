@@ -14,6 +14,9 @@ export default function Component() {
   const [rhythmMode, setRhythmMode] = useState<RhythmMode>('wave');
   const rhythmModeRef = useRef<RhythmMode>();
   const lightInterval = useRef<any>();
+  const audioContextRef = useRef<AudioContext>(
+    new (window.AudioContext || window.webkitAudioContext)()
+  );
 
   const handleSelectAudio = () => {
     inputRef.current.click();
@@ -21,14 +24,21 @@ export default function Component() {
 
   // 处理音频文件变更
   const handleFileChange = (e) => {
+    audioContextRef.current.close();
     const file = e.target.files[0];
+
     setFile(file);
-    const audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+
     const reader = new FileReader();
 
     reader.onload = async (e) => {
       const arrayBuffer = e.target.result;
+
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      audioContextRef.current = audioContext;
+
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
