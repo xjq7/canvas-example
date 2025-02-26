@@ -3,7 +3,11 @@ import { Animate } from '@leafer-in/animate';
 
 import { keyboards } from './constants';
 
-interface IMarchingMusicConfig {}
+interface IMarchingMusicConfig {
+  view: string;
+  width: number;
+  height: number;
+}
 
 const colors = ['#ed5a65', '#43b244', '#58B2DC', '#8A6BBE'];
 
@@ -24,7 +28,11 @@ export class MarchingMusic {
       this.color = colors[Math.round(Math.random() * 3)];
     }, 2000);
 
-    this.leafer = new Leafer({ view: window });
+    this.leafer = new Leafer({
+      view: config.view,
+      width: config.width,
+      height: config.height,
+    });
   }
 
   update(config: Partial<IMarchingMusicConfig>) {

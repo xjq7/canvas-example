@@ -90,6 +90,7 @@ export default function Component() {
     marchingMusicRef.current = new MarchingMusic({
       width: window.innerWidth,
       height: window.innerHeight,
+      view: 'marching-music',
     });
 
     return () => {
@@ -111,7 +112,10 @@ export default function Component() {
   );
 
   return (
-    <div className="w-[100vw] h-[100vh] flex items-center justify-center background-[#aaa] flex-col">
+    <div
+      id="marching-music"
+      className="w-[100vw] h-[100vh] flex items-center justify-center background-[#aaa] flex-col"
+    >
       <div className={S.operator}>
         <input
           ref={inputRef}
